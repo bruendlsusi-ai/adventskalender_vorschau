@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vorschau Adventskalender</title>
+<title>Schwimm-Adventskalender</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -112,7 +112,6 @@ td.u{white-space:nowrap}
     <h1>Schwimm-Adventskalender</h1>
     <p class="lead">24 Mini-Workouts vom 1. bis 24. Dezember: Trockentechnik und Athletik für zu Hause, dazu drei Wassereinheiten an den Samstagen 5., 12. und 19. Dezember.</p>
     <p class="status" id="status"></p>
-    <p class="status" style="color:var(--gold)">Nur für dich: Vorschau-Datei mit allen Türchen offen. Diese Datei nicht hochladen oder teilen.</p>
   </div>
   <div class="rope" id="rope" aria-hidden="true"></div>
   <svg class="waves" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 Q75 6 150 22 T300 22 T450 22 T600 22 T750 22 T900 22 T1050 22 T1200 22 V56 H0Z" fill="var(--bg)"/></svg>
@@ -550,11 +549,10 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const WAVE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" fill="none" stroke="#0f7fa0" stroke-width="2.2" stroke-linecap="round"/></svg>';
 const MOON='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="#7d9aa2"/></svg>';
 const LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="#7d9aa2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#7d9aa2" stroke-width="2.2"/></svg>';
-const preview=true; /* VORSCHAU-DATEI: alle Türchen offen – nicht hochladen! */
 const now=new Date(),Y=now.getMonth()===0?now.getFullYear()-1:now.getFullYear();
-const isOpen=n=>preview||now>=new Date(Y,MONAT,n);
-let done={};try{done=JSON.parse(localStorage.getItem("swim-advent-done")||"{}")}catch(e){}
-const save=()=>{try{localStorage.setItem("swim-advent-done",JSON.stringify(done))}catch(e){}};
+const isOpen=n=>true; /* diese Version: alle Türchen immer offen */
+let done={};try{done=JSON.parse(localStorage.getItem("swim-advent-done-offen")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("swim-advent-done-offen",JSON.stringify(done))}catch(e){}};
 const grid=document.getElementById("grid"),dlg=document.getElementById("dlg");
 let cur=1;
 function render(){
@@ -563,9 +561,8 @@ function render(){
     const ic=!o?LOCK:u.w?WAVE:u.p?MOON:"";
     return `<button class="${cls}" data-n="${n}" aria-label="Türchen ${n}${o?": "+esc(u.t):", noch verschlossen"}"><span class="n">${n}</span><span class="ttl">${o?esc(u.t):""}</span><span class="meta">${ic}<span>${o?esc(u.d):n+". Dezember"}</span></span></button>`}).join("");
   const c=Object.keys(done).length,st=document.getElementById("status");
-  if(preview)st.innerHTML="Vorschau: alle Türchen sind offen.";
-  else if(now<new Date(Y,MONAT,1)){const days=Math.ceil((new Date(Y,MONAT,1)-now)/864e5);st.innerHTML=`Noch <b>${days} ${days===1?"Tag":"Tage"}</b> bis zum ersten Türchen.`}
-  else st.innerHTML=`<b>${c} von 24</b> Einheiten erledigt.`;
+  if(false){const days=Math.ceil((new Date(Y,MONAT,1)-now)/864e5);st.innerHTML=`Noch <b>${days} ${days===1?"Tag":"Tage"}</b> bis zum ersten Türchen.`}
+  else st.innerHTML=`Alle 24 Türchen sind offen · <b>${c} von 24</b> Einheiten erledigt.`;
 }
 function body(u){
   if(u.p)return `<p>Heute ist Ruhetag. Regeneration gehört zum Training – morgen folgt das Finale.</p>`;
